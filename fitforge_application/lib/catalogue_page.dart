@@ -16,8 +16,12 @@ class _CataloguePageState extends State<CataloguePage> {
   @override
   Widget build(BuildContext context) {
     final seancesFiltres = seancesDisponibles.where((s) {
-      final groupeOK = groupeFiltre == null || s.groupe == groupeFiltre;
-      final niveauOK = niveauFiltre == null || s.niveau == niveauFiltre;
+      final g = s.groupe.toLowerCase();
+      final n = s.niveau.toLowerCase();
+
+      final groupeOK = groupeFiltre == null || g == groupeFiltre!.toLowerCase();
+      final niveauOK = niveauFiltre == null || n == niveauFiltre!.toLowerCase();
+
       return groupeOK && niveauOK;
     }).toList();
 
@@ -32,26 +36,22 @@ class _CataloguePageState extends State<CataloguePage> {
           DropdownButton<String>(
             value: groupeFiltre,
             hint: const Text("Filtrer par groupe musculaire"),
-            items: ["Pectoraux", "Dos", "Jambes", "Bras"].map((g) {
-              return DropdownMenuItem(value: g, child: Text(g));
-            }).toList(),
+            items: ["jambes", "dos", "abdos", "bras", "cardio", "épaules", "poitrine"]
+                .map((g) => DropdownMenuItem(value: g, child: Text(g)))
+                .toList(),
             onChanged: (value) {
-              setState(() {
-                groupeFiltre = value;
-              });
+              setState(() => groupeFiltre = value);
             },
           ),
 
           DropdownButton<String>(
             value: niveauFiltre,
             hint: const Text("Filtrer par niveau"),
-            items: ["Débutant", "Intermédiaire", "Avancé"].map((n) {
-              return DropdownMenuItem(value: n, child: Text(n));
-            }).toList(),
+            items: ["débutant", "intermédiaire", "avancé"]
+                .map((n) => DropdownMenuItem(value: n, child: Text(n)))
+                .toList(),
             onChanged: (value) {
-              setState(() {
-                niveauFiltre = value;
-              });
+              setState(() => niveauFiltre = value);
             },
           ),
 
