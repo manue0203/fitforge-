@@ -3,7 +3,12 @@ import 'seance.dart';
 import 'seance_generee.dart';
 import 'catalogue_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //  Charge le fichier JSON avant de lancer l'application pour s'assurer que les données sont disponibles
+  await chargerSeancesDepuisJson();
+
   runApp(const MyApp());
 }
 
@@ -39,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int? duree;
   String? niveau;
 
-  // Widget pour styliser les Dropdowns
+  // Widget pour styliser les DropdownButton de manière uniforme
   Widget buildDropdown<T>({
     required T? value,
     required String hint,
@@ -79,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200], // 🔥 Fond gris clair
+      backgroundColor: Colors.grey[200], // Fond gris clair
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -107,39 +112,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
               const SizedBox(height: 30),
 
-              // 🔵 Groupe
+              // Groupe
               buildDropdown<String>(
                 value: groupe,
                 hint: "Choisir un groupe",
-                items: ["Pectoraux", "Dos", "Jambes", "Bras"],
+                items: ["jambes", "dos", "abdos", "bras", "cardio", "épaules", "poitrine"],
                 onChanged: (value) => setState(() => groupe = value),
               ),
 
-              // 🔵 Durée
+              // Durée
               buildDropdown<int>(
                 value: duree,
                 hint: "Durée (minutes)",
-                items: [10, 20, 30, 45],
+                items: [4, 5, 8, 10, 12, 15, 20, 30],
                 onChanged: (value) => setState(() => duree = value),
               ),
 
-              // 🔵 Niveau
+              // Niveau
               buildDropdown<String>(
                 value: niveau,
                 hint: "Niveau",
-                items: ["Débutant", "Intermédiaire", "Avancé"],
+                items: ["débutant", "intermédiaire", "avancé"],
                 onChanged: (value) => setState(() => niveau = value),
               ),
 
               const SizedBox(height: 20),
 
-              // 🔵 Bouton générer
+              // Bouton générer
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -154,8 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       orElse: () => Seance(
                         id: 0,
                         nom: "Aucune séance trouvée",
-                        description:
-                            "Aucune séance ne correspond à vos critères.",
+                        description: "Aucune séance ne correspond à vos critères.",
                         groupe: groupe!,
                         duree: duree!,
                         niveau: niveau!,
@@ -165,8 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            SeanceGeneree(seance: seanceGeneree),
+                        builder: (context) => SeanceGeneree(seance: seanceGeneree),
                       ),
                     );
                   }
@@ -176,13 +178,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
               const SizedBox(height: 10),
 
-              // 🔵 Bouton catalogue
+              // Bouton  pour le catalogue
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey[700],
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -190,8 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const CataloguePage()),
+                    MaterialPageRoute(builder: (context) => const CataloguePage()),
                   );
                 },
                 child: const Text("Voir le catalogue"),
