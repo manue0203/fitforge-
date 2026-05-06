@@ -35,7 +35,7 @@ List<Seance> seancesDisponibles = [];
 
 /// Fonction pour charger le fichier JSON
 Future<void> chargerSeancesDepuisJson() async {
-  final data = await rootBundle.loadString('assets/exercices.json');
+  final data = await rootBundle.loadString('assets/seance.json');
   final List<dynamic> jsonList = json.decode(data);
 
   seancesDisponibles = jsonList.map((e) => Seance.fromJson(e)).toList();
